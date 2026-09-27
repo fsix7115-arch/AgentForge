@@ -21,18 +21,18 @@ import (
 
 // Turn is one exchange: what was asked and what was answered.
 type Turn struct {
-	Role      string    `json:"role"`      // "user" or "assistant"
+	Role      string    `json:"role"` // "user" or "assistant"
 	Content   string    `json:"content"`
 	Timestamp time.Time `json:"ts"`
 }
 
 // Session is a named conversation. The MVP has exactly one.
 type Session struct {
-	ID         string `json:"id"`
-	Created    time.Time `json:"created"`
-	Updated    time.Time `json:"updated"`
-	Turns      []Turn `json:"turns"`
-	TurnLimit  int    `json:"turn_limit"`
+	ID        string    `json:"id"`
+	Created   time.Time `json:"created"`
+	Updated   time.Time `json:"updated"`
+	Turns     []Turn    `json:"turns"`
+	TurnLimit int       `json:"turn_limit"`
 }
 
 // Store is the persistence surface. Keep it small so the SQLite replacement

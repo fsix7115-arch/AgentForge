@@ -255,12 +255,12 @@ func (c Config) DatabasePath() string {
 // the first place, but this keeps that guarantee explicit.
 func (c Config) Redacted() map[string]string {
 	return map[string]string{
-		"addr":       c.Addr,
-		"data_dir":   c.DataDir,
-		"provider":   c.Provider,
-		"model":      c.Model,
+		"addr":        c.Addr,
+		"data_dir":    c.DataDir,
+		"provider":    c.Provider,
+		"model":       c.Model,
 		"api_key_env": c.APIKeyEnv,
-		"timeout":    c.Timeout.String(),
-		"key_set":    strconv.FormatBool(c.APIKey() != ""),
+		"timeout":     c.Timeout.String(),
+		"key_set":     strconv.FormatBool(c.APIKey() != ""),
 	}
 }

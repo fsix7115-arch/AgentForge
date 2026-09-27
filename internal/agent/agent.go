@@ -81,8 +81,8 @@ func historyText(history []store.Turn, userMsg string) string {
 // the test suite work on a plane, on a phone with no data, and in CI.
 type echoAgent struct{}
 
-func (a *echoAgent) Name() string   { return "echo" }
-func (a *echoAgent) Offline() bool  { return true }
+func (a *echoAgent) Name() string  { return "echo" }
+func (a *echoAgent) Offline() bool { return true }
 
 func (a *echoAgent) Reply(ctx context.Context, history []store.Turn, userMsg string) (string, error) {
 	n := len(history) + 1
