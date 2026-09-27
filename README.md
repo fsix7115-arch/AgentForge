@@ -54,31 +54,52 @@ Four conclusions that should shape any implementation:
    layer. The space between them — one agent, many surfaces, one memory — is
    where something new could fit.
 
-## Phase 2 — the honest MVP
+**Correction, added after Phase 2.** Point 4 was wrong. The layer-between
+position is already occupied by Hermes itself. Phase 2 also found four
+projects this list missed. See [`VALIDATION.md`](VALIDATION.md).
 
-Before architecture, the harder question: what is the *smallest useful*
-AgentForge?
+## Phase 2 — the position, narrowed
 
-Proposed MVP, and the reasoning for cutting everything else:
+Phase 1 ended with three candidate positions. Phase 2 tested all three against
+the market. Two are already occupied and one survives.
 
-- one agent loop, one model provider, one interface (CLI)
-- no auth, no multi-tenant, no web UI, no plugin marketplace
-- memory as a plain file, not a database
-- tools discovered from a directory, not a registry
+**A gap search turned up four more projects Phase 1 missed**, including
+[Gormes](https://gormes.ai/) — one ~55.6 MB Go binary, MIT, Linux/macOS/
+Windows/Android, with chat, memory, dashboards and gateways. That is the
+"easiest install" position, already shipped. **Hezo** (GPL-3.0) does agent
+teams. Two other single-binary projects, `hermes-agent-rust` and `Hector`,
+made the same pitch and have both been quiet for months.
 
-Everything in that list is deliberate scope removal, not an oversight. The
-full vision is Phase 5 and beyond. Reaching it from a working CLI is far more
-likely than reaching it from a partially built server.
+So:
 
-**This has not been agreed yet.** Phase 2 is where the vision either becomes a
-real project or an abandoned repository.
+| Position | Verdict |
+|---|---|
+| Easiest-to-install agent server | **Taken** — Gormes, and Ollama before it |
+| One agent, many surfaces, one memory | **Taken** — that is Hermes, at 249k stars |
+| **Something for a phone** | **The remaining one** |
+
+> AgentForge is the AI agent server that runs on a phone — installed, updated
+> and tested on the phone, reachable from the phone — and works the same on a
+> VPS when the phone is not it.
+
+The MVP is six things: a binary that builds on `aarch64-linux-android`, a
+loopback HTTP server, one model provider, one messaging interface, SQLite
+state in one deletable file, and an offline `doctor` command.
+
+No browser UI. No plugin marketplace. No auth. No database. No Docker-first.
+No visual builder.
+
+**The test that decides it:** someone must be able to run the build on a real
+Android phone in Termux without asking the author a question.
+
+Full reasoning in [`docs/VALIDATION.md`](docs/VALIDATION.md).
 
 ## Roadmap
 
 | Phase | Status |
 |---|---|
-| 1. Market and project research | **done** — `docs/RESEARCH.md` |
-| 2. Problem validation and MVP | **not started** |
+| 1. Market and project research | **done** — [`docs/RESEARCH.md`](docs/RESEARCH.md) |
+| 2. Problem validation and MVP | **done** — [`docs/VALIDATION.md`](docs/VALIDATION.md) |
 | 3. Architecture | not started |
 | 4. Learning roadmap | not started |
 | 5. Development roadmap | not started |
