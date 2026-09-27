@@ -9,10 +9,11 @@ go build -o agentforge ./cmd/agentforge     # 10 MB, no dependencies
 ./agentforge serve                          # local HTTP server
 ```
 
-> **Status: working MVP (Phase 6 partial).** There is a real binary with real
-> tests. There is no browser UI, no plugin system, and no messaging
-> integration. The phone install — the whole positioning — is not tested on a
-> real device yet. See [Honest status](#honest-status).
+> **Status: MVP verified on a real phone.** A single binary with 51 tests, and
+> confirmed running on an actual Android device — Android 15, arm64, inside
+> Termux, built from source in about 6 minutes. No browser UI, no plugin
+> system, no messaging integration yet. See [Verified on a real
+> phone](#verified-on-a-real-phone).
 
 ---
 
@@ -162,18 +163,72 @@ it needs cgo, and the phone this project targets is arm64.
 
 Live-tested against real Gemini and Groq endpoints, not only mocks.
 
+## Verified on a real phone
+
+**This is the section the whole project exists for.** Until a real phone ran
+it, the central claim was unproven. Here is the output from one that did.
+
+Device: Android 15 (SDK 35), aarch64, Termux, Go 1.27.1.
+Run: `scripts/termux-check.sh`. Result: **13 passed, 0 failed, 1 warning.**
+
+```
+== 1. the device ==
+  ok   CPU is aarch64 (64-bit) — the target architecture
+  ok   running inside Termux (F-Droid or Termux:API build)
+  ok   Android 15 (SDK 35)
+
+== 2. the build toolchain ==
+  ok   git present
+  ok   go present (go1.27.1)
+  ok   61278 MB free
+
+== 3. build AgentForge from source ==
+  ok   binary built
+  ok   binary size 11M
+
+== 4. does the binary actually run on this phone? ==
+agentforge 0.1.0-dev
+  ok   the binary executes on this device
+
+== 5. agentforge doctor ==
+[ok  ] platform      android/arm64
+[ok  ] data-dir      .../agentforge-check/state — writable, 61278 MB free
+[ok  ] session       .../agentforge.db — 2 turns, 468 bytes
+[ok  ] port          127.0.0.1:8787 is free
+All checks passed.
+
+== 6. a real conversation turn ==
+  ok   echo[3]: reply with the word: phone works
+
+== 7. the HTTP server ==
+  ok   server started and /health answered
+       {"offline":true,"ok":true,"provider":"echo","turns":4}
+
+  THIS PHONE CAN RUN AGENTFORGE.
+```
+
+What this does and does not prove:
+
+- **Proves** the build works on a real ARM Android device, the binary executes,
+  `doctor` passes, history persists to a file the user can read, and the HTTP
+  server binds and answers.
+- **Does not prove** anything about a real model on a phone. The test used the
+  `echo` provider, which makes no network call. Running Gemini or Groq from a
+  phone is the obvious next check and has not been done.
+
 ## Honest status
 
 **Works:** the binary builds, all tests pass, `doctor`, `chat`, and `serve` run,
-real Gemini and Groq replies verified, cross-compiles to nine targets.
+real Gemini and Groq replies verified on a laptop, cross-compiles to seven
+targets, and **verified end to end on a real Android phone.**
 
 **Not done:**
 
-- **Not tested on a real phone.** The positioning is phone-first and the device
-  test has not happened. This is the single largest gap.
-  [`scripts/termux-check.sh`](scripts/termux-check.sh) exists to produce that
-  evidence in one command, and
-  [`docs/TERMUX.md`](docs/TERMUX.md) documents the manual path.
+- **A real model has not been run from the phone.** The device test used the
+  `echo` provider, which makes no network call. Gemini or Groq from a phone is
+  the next check, and it is a different claim from "the binary runs".
+- Reboot survival is not implemented. `termux-boot` is documented in
+  [`docs/TERMUX.md`](docs/TERMUX.md) but the project does not set it up.
 - No messaging interface. The original vision listed terminal, browser, API,
   and future mobile apps; only the terminal and API exist.
 - No browser UI, deliberately. Open WebUI and LibreChat saturate that space.
