@@ -1,0 +1,54 @@
+name: test
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-go@v5
+        with:
+          go-version: '1.24'
+
+      - name: vet
+        run: go vet ./...
+
+      - name: test
+        run: go test -race ./...
+
+      - name: test count is not silently shrinking
+        run: |
+          COUNT=$(go test -v ./... 2>&1 | grep -c '^=== RUN')
+          echo "tests: $COUNT"
+          # 53 at the time of writing. Lower means tests were deleted rather
+          # than the suite getting smaller on purpose.
+          if [ "$COUNT" -lt 53 ]; then
+            echo "::error::test count dropped to $COUNT (expected >= 53)"
+            exit 1
+          fi
+
+  # The phone is the positioning. If the Android build breaks, the project
+  # has lost its reason to exist, so it is a hard failure rather than a note.
+  cross-compile:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-go@v5
+        with:
+          go-version: '1.24'
+
+      - name: android/arm64 (the target platform)
+        run: GOOS=android GOARCH=arm64 CGO_ENABLED=0 go build -o /dev/null ./cmd/agentforge
+
+      - name: linux/arm64
+        run: GOOS=linux GOARCH=arm64 CGO_ENABLED=0 go build -o /dev/null ./cmd/agentforge
+
+      - name: darwin/arm64
+        run: GOOS=darwin GOARCH=arm64 CGO_ENABLED=0 go build -o /dev/null ./cmd/agentforge
+
+      - name: windows/amd64
+        run: GOOS=windows GOARCH=amd64 CGO_ENABLED=0 go build -o /dev/null ./cmd/agentforge
