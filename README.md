@@ -74,19 +74,23 @@ go build -o agentforge ./cmd/agentforge
 
 ### On a phone (Termux)
 
-This is the target, and it is the part that is not yet proven. The expected
-path:
+This is the target, and it is the part that is not yet proven.
 
 ```bash
-pkg install golang git
-git clone https://github.com/fsix7115-arch/AgentForge
-cd AgentForge
-go build -o agentforge ./cmd/agentforge
-./agentforge doctor
+curl -fsSL https://raw.githubusercontent.com/fsix7115-arch/AgentForge/main/scripts/termux-check.sh | bash
 ```
 
+That one script checks the device, installs Go if missing, clones, builds, and
+verifies the binary end to end, then prints a verdict. Read
+[`docs/TERMUX.md`](docs/TERMUX.md) first — it has the manual path, the
+storage requirements, and troubleshooting.
+
+Termux must come from **F-Droid**, not the Play Store: the Play Store build
+has no `pkg` and therefore no Go.
+
 The build for `android/arm64` succeeds, which is necessary but not sufficient.
-It has never been run on a device.
+**It has never been run on a real device.** That is the project's largest gap
+and the reason this page asks for evidence rather than testimonials.
 
 ## Configuration
 
@@ -167,6 +171,9 @@ real Gemini and Groq replies verified, cross-compiles to nine targets.
 
 - **Not tested on a real phone.** The positioning is phone-first and the device
   test has not happened. This is the single largest gap.
+  [`scripts/termux-check.sh`](scripts/termux-check.sh) exists to produce that
+  evidence in one command, and
+  [`docs/TERMUX.md`](docs/TERMUX.md) documents the manual path.
 - No messaging interface. The original vision listed terminal, browser, API,
   and future mobile apps; only the terminal and API exist.
 - No browser UI, deliberately. Open WebUI and LibreChat saturate that space.
@@ -203,9 +210,20 @@ MIT.
 
 ## Documentation
 
+- [`docs/TERMUX.md`](docs/TERMUX.md) — the phone install, storage requirements,
+  reboot survival, and troubleshooting. **Read this first if you have a phone.**
 - [`docs/RESEARCH.md`](docs/RESEARCH.md) — ten projects compared, with live
   GitHub data and the corrections Phase 2 forced
 - [`docs/VALIDATION.md`](docs/VALIDATION.md) — why the positioning narrowed to
   one idea, and what the MVP deliberately excludes
 - [`docs/AGENTFORGE_PROMPT.md`](docs/AGENTFORGE_PROMPT.md) — the build prompt,
   with two added rules and the reasoning for each
+- [`scripts/termux-check.sh`](scripts/termux-check.sh) — one command that
+  proves whether a given phone can run this
+
+## How to help
+
+The most useful thing anyone can do is run
+[`scripts/termux-check.sh`](scripts/termux-check.sh) on a real Android phone
+and open an issue with the output. Success and specific failure are both
+valuable; silence leaves the central claim unproven.
