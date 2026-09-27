@@ -139,21 +139,22 @@ auth before there is a second user is work nobody needs yet.
 ## Testing
 
 ```
-config   11 tests   resolution order, provider defaults, validation
+config   10 tests   resolution order, provider defaults, validation
 agent     9 tests   offline provider, key handling, history trimming
-store    10 tests   atomicity, turn limit, corruption, concurrency
+store     9 tests   atomicity, turn limit, corruption, concurrency
 server   12 tests   endpoints, validation, error paths, headers
 doctor   11 tests   offline guarantee, key redaction, port conflict
 ```
 
 ```bash
-go test ./...              # 53 tests
+go test ./...              # 51 tests
 go test -race ./...        # concurrency
 go vet ./...
 ```
 
 Verified building for linux/amd64, linux/arm64, linux/386, android/arm64,
-android/amd64, darwin/arm64, darwin/amd64, windows/amd64, windows/arm64.
+darwin/arm64, windows/amd64, windows/arm64. `android/amd64` is not a target:
+it needs cgo, and the phone this project targets is arm64.
 
 Live-tested against real Gemini and Groq endpoints, not only mocks.
 

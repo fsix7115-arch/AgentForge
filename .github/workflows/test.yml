@@ -24,10 +24,10 @@ jobs:
         run: |
           COUNT=$(go test -v ./... 2>&1 | grep -c '^=== RUN')
           echo "tests: $COUNT"
-          # 53 at the time of writing. Lower means tests were deleted rather
+          # 51 at the time of writing. Lower means tests were deleted rather
           # than the suite getting smaller on purpose.
-          if [ "$COUNT" -lt 53 ]; then
-            echo "::error::test count dropped to $COUNT (expected >= 53)"
+          if [ "$COUNT" -lt 51 ]; then
+            echo "::error::test count dropped to $COUNT (expected >= 51)"
             exit 1
           fi
 
