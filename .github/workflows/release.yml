@@ -1,0 +1,136 @@
+name: Release
+
+on:
+  push:
+    tags:
+      - 'v*'
+
+permissions:
+  contents: write
+
+jobs:
+  build:
+    name: Build binaries
+    runs-on: ubuntu-latest
+
+    strategy:
+      matrix:
+        include:
+          - goos: linux
+            goarch: amd64
+            suffix: linux-amd64
+          - goos: linux
+            goarch: arm64
+            suffix: linux-arm64
+          - goos: linux
+            goarch: "386"
+            suffix: linux-386
+          - goos: android
+            goarch: arm64
+            suffix: android-arm64
+          - goos: darwin
+            goarch: arm64
+            suffix: darwin-arm64
+          - goos: windows
+            goarch: amd64
+            suffix: windows-amd64
+            ext: .exe
+          - goos: windows
+            goarch: arm64
+            suffix: windows-arm64
+            ext: .exe
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set up Go
+        uses: actions/setup-go@v5
+        with:
+          go-version: '1.24'
+
+      - name: Run tests (linux/amd64 only)
+        if: matrix.goos == 'linux' && matrix.goarch == 'amd64'
+        run: go test ./...
+
+      - name: Build
+        env:
+          GOOS: ${{ matrix.goos }}
+          GOARCH: ${{ matrix.goarch }}
+          CGO_ENABLED: "0"
+        run: |
+          VERSION="${{ github.ref_name }}"
+          OUTPUT="agentforge-${{ matrix.suffix }}${{ matrix.ext }}"
+          go build \
+            -ldflags "-X github.com/fsix7115-arch/AgentForge/internal/version.Version=${VERSION}" \
+            -o "${OUTPUT}" \
+            ./cmd/agentforge
+          echo "Built: ${OUTPUT} ($(du -sh ${OUTPUT} | cut -f1))"
+
+      - name: Upload artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: agentforge-${{ matrix.suffix }}
+          path: agentforge-${{ matrix.suffix }}${{ matrix.ext }}
+          if-no-files-found: error
+
+  release:
+    name: Create GitHub release
+    runs-on: ubuntu-latest
+    needs: build
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Download all artifacts
+        uses: actions/download-artifact@v4
+        with:
+          path: dist
+          merge-multiple: true
+
+      - name: List artifacts
+        run: ls -lh dist/
+
+      - name: Create release
+        uses: softprops/action-gh-release@v2
+        with:
+          files: dist/*
+          generate_release_notes: true
+          body: |
+            ## AgentForge ${{ github.ref_name }}
+
+            A self-hosted AI agent server. One binary, runs on a phone.
+
+            ### Install
+
+            Download the binary for your platform below and run it directly. No dependencies.
+
+            | Platform | File |
+            |---|---|
+            | Linux x86-64 | `agentforge-linux-amd64` |
+            | Linux ARM64 (servers, Raspberry Pi) | `agentforge-linux-arm64` |
+            | Linux 32-bit | `agentforge-linux-386` |
+            | Android ARM64 (Termux) | `agentforge-android-arm64` |
+            | macOS Apple Silicon | `agentforge-darwin-arm64` |
+            | Windows x86-64 | `agentforge-windows-amd64.exe` |
+            | Windows ARM64 | `agentforge-windows-arm64.exe` |
+
+            ### Termux (Android)
+
+            ```bash
+            # download the android-arm64 binary, then:
+            chmod +x agentforge-android-arm64
+            ./agentforge-android-arm64 doctor
+            ```
+
+            Or build from source — see [docs/TERMUX.md](docs/TERMUX.md).
+
+            ### Quick start
+
+            ```bash
+            export GEMINI_API_KEY=your_key_here
+            ./agentforge doctor
+            ./agentforge chat "hello"
+            ./agentforge serve
+            ```

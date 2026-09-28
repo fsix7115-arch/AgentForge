@@ -252,12 +252,12 @@ targets, and **verified end to end on a real Android phone.**
 |---|---|
 | 1. Market research | done — [`docs/RESEARCH.md`](docs/RESEARCH.md) |
 | 2. Validation and MVP | done — [`docs/VALIDATION.md`](docs/VALIDATION.md) |
-| 3. Architecture | implicit in the code; written up pending |
-| 4. Learning roadmap | not started |
-| 5. Development roadmap | not started |
+| 3. Architecture | done — [`docs/ARCHITECTURE.md`](docs/ARCHITECTURE.md) |
+| 4. Learning roadmap | done — [`docs/LEARNING_ROADMAP.md`](docs/LEARNING_ROADMAP.md) |
+| 5. Development roadmap | done — [`docs/DEVELOPMENT_ROADMAP.md`](docs/DEVELOPMENT_ROADMAP.md) |
 | 6. Implementation | **partial** — CLI, server, tests, three providers |
-| 7. Quality check | partial — tests written, not audited |
-| 8. Open-source release | README and LICENSE only |
+| 7. Quality check | done — [`docs/QUALITY.md`](docs/QUALITY.md) |
+| 8. Open-source release | done — [`CONTRIBUTING.md`](CONTRIBUTING.md), issue templates |
 
 ## License
 
@@ -267,12 +267,22 @@ MIT.
 
 - [`docs/TERMUX.md`](docs/TERMUX.md) — the phone install, storage requirements,
   reboot survival, and troubleshooting. **Read this first if you have a phone.**
+- [`docs/ARCHITECTURE.md`](docs/ARCHITECTURE.md) — how the code is structured,
+  why each decision was made, and what the tradeoffs are
+- [`docs/QUALITY.md`](docs/QUALITY.md) — how to run tests, what each test
+  covers, common bugs, and security/performance notes
+- [`docs/LEARNING_ROADMAP.md`](docs/LEARNING_ROADMAP.md) — beginner path
+  through Git, Go, APIs, databases, AI APIs, and more
+- [`docs/DEVELOPMENT_ROADMAP.md`](docs/DEVELOPMENT_ROADMAP.md) — the
+  week-by-week build plan, with goals and success criteria for each phase
 - [`docs/RESEARCH.md`](docs/RESEARCH.md) — ten projects compared, with live
   GitHub data and the corrections Phase 2 forced
 - [`docs/VALIDATION.md`](docs/VALIDATION.md) — why the positioning narrowed to
   one idea, and what the MVP deliberately excludes
 - [`docs/AGENTFORGE_PROMPT.md`](docs/AGENTFORGE_PROMPT.md) — the build prompt,
   with two added rules and the reasoning for each
+- [`CONTRIBUTING.md`](CONTRIBUTING.md) — dev setup, code style, how to submit
+  a PR, and good first issues
 - [`scripts/termux-check.sh`](scripts/termux-check.sh) — one command that
   proves whether a given phone can run this
 
