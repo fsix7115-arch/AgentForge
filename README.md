@@ -1,5 +1,11 @@
 # AgentForge
 
+[![test](https://github.com/fsix7115-arch/AgentForge/actions/workflows/test.yml/badge.svg)](https://github.com/fsix7115-arch/AgentForge/actions/workflows/test.yml)
+[![release](https://github.com/fsix7115-arch/AgentForge/actions/workflows/release.yml/badge.svg)](https://github.com/fsix7115-arch/AgentForge/actions/workflows/release.yml)
+[![Go](https://img.shields.io/badge/Go-1.24-00ADD8?logo=go&logoColor=white)](go.mod)
+[![tests](https://img.shields.io/badge/tests-51-brightgreen)](.github/workflows/test.yml)
+[![License](https://img.shields.io/badge/license-see%20LICENSE-blue)](LICENSE)
+
 **A self-hosted AI agent server. One binary, runs on a phone.**
 
 ```bash
@@ -14,6 +20,25 @@ go build -o agentforge ./cmd/agentforge     # 10 MB, no dependencies
 > Termux, built from source in about 6 minutes. No browser UI, no plugin
 > system, no messaging integration yet. See [Verified on a real
 > phone](#verified-on-a-real-phone).
+
+---
+
+## Relationship to other projects
+
+This is **not** the same thing as
+[`agentforge-compliance-hub`](https://github.com/fsix7115-arch/agentforge-compliance-hub),
+despite the similar name. They are separate projects that happen to share a
+brand:
+
+| | This repo | agentforge-compliance-hub |
+|---|---|---|
+| What it is | A self-hosted AI agent **runtime** — one binary, runs on a phone | A **governance** platform for fleets of agents — audit, policy, cost, approvals |
+| Language | Go | TypeScript / Next.js |
+| What it answers | "Where can I run my agent?" | "What did my agents do, and was it allowed?" |
+| State | MVP verified on Android 15 / arm64 | MVP, SQLite local, Docker for Postgres |
+
+They can be used together — this is the runtime, that is the control plane — but
+neither depends on the other, and either is useful alone.
 
 ---
 
